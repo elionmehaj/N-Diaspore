@@ -1,0 +1,77 @@
+Role & Context:
+We are continuing the development of the "KahKosova" web app. The current foundation (React, Vite, Tailwind CSS, shadcn/ui) is working perfectly. I now want to make three major upgrades:
+
+Update the design system to a patriotic Red and Black theme.
+
+Translate the entire UI to Albanian as the default language.
+
+Expand the "Services" (Shërbimet) section with deeper, more complex offerings specifically tailored to diaspora needs.
+
+Phase 1: Design System & Color Palette Update (Red & Black)
+
+Update globals.css and the Tailwind config to use a sophisticated Red and Black theme.
+
+Backgrounds: Use rich dark tones (e.g., #0A0A0A for the main background, #171717 for cards/panels).
+
+Primary Accent Color: Use "Albanian Red" (e.g., #E41E26 or bg-red-600 / bg-red-700). Use this for primary CTA buttons, active states, and icons.
+
+Text: White and light gray (text-gray-200, text-gray-400) for high readability.
+
+UI Details: Update the shadcn/ui theme variables so that focuses, rings, and primary buttons default to the new red. Ensure borders on cards are subtle (e.g., border-gray-800 or a very dark red tint).
+
+Phase 2: Full Albanian Localization (Gjuha Shqipe)
+
+Change all hardcoded English text across all existing pages to Albanian.
+
+Global Elements: >     * Navbar: Home -> Ballina, Services -> Shërbimet, News -> Lajme, About -> Rreth Nesh, Contact -> Kontakt.
+
+Auth: Sign In -> Kyçu, Sign Up -> Regjistrohu, Email -> Emaili, Password -> Fjalëkalimi.
+
+Dashboard: Pulti.
+
+Home Page Updates: >     * Headline: "Ura juaj digjitale me Kosovën" (Your Digital Bridge to Kosovo).
+
+Stats: "2,847 Familje", "12 Komuna", "98% Kënaqshmëri".
+
+Features: "Toka (Patundshmëri)", "Familja (Dërgesa & Dhurata)", "Letrat (Administrata)".
+
+Ensure the language toggle still exists but defaults to AL.
+
+Phase 3: Deep Dive into New & Existing Services (Shërbimet)
+Please build out the following new service pages and integrate them into the Dashboard and Services Overview routing. Use detailed UI components (cards, badges, modals, forms).
+
+1. Shëndeti (Healthcare for Family in Kosovo)
+
+Goal: Allow diaspora to book and pay for medical checkups or pharmacy vouchers for their relatives.
+
+UI Build: Create a page with a search/filter sidebar (Filter by: City, Clinic Type - Dental, Cardiology, General). Show a grid of Clinic Cards. Each card should have a "Rezervo Termin" (Book Appointment) button that opens a shadcn Dialog form asking for the relative's name, phone number in Kosovo, and preferred date.
+
+2. Ndërtimi & Rinovimi (Construction & Home Renovation)
+
+Goal: Connect diaspora with vetted local contractors to build or fix their homes in Kosovo.
+
+UI Build: A split-screen layout. Left side: A multistep form ("Kërko Ofertë" / Request Quote) asking for project type (Roof, Plumbing, Full Build), budget dropdown, and description. Right side: Testimonials and a grid of "Top Vetted Contractors" with rating badges (e.g., 4.9/5 Stars).
+
+3. Investime (Diaspora Angel Investment / Business)
+
+Goal: A platform to browse and invest in local Kosovo startups or real estate projects.
+
+UI Build: A financial dashboard style page. Show a carousel of "Projekte Aktive" (Active Projects). Use progress bars (shadcn Progress component) to show funding goals (e.g., "Mbledhur €50k nga €100k"). Include a data table (shadcn Table) showing ROI projections and minimum investment amounts.
+
+4. Transporti & Logjistika (Travel & Cargo)
+
+Goal: Rent-a-car bookings and airport transfers (PRN to city).
+
+UI Build: A hero section with a DatePicker component (shadcn Calendar) for "Marrja" (Pick-up) and "Kthimi" (Drop-off). Below it, a list view of available cars with features (Auto, Diesel, 5 Seats) and a "Rezervo" button.
+
+Execution Steps for the AI:
+
+Update styling variables for the Red/Black theme.
+
+Refactor existing components to Albanian.
+
+Generate the 4 new pages (/shendeti, /ndertimi, /investime, /transporti).
+
+Update the router and the DashboardLayout sidebar to include links to these new pages.
+
+Output a summary of the generated files and any missing dependencies.

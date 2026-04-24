@@ -1,0 +1,63 @@
+Here is the super-detailed prompt tailored for your AI builder. This focuses specifically on setting up a robust, state-managed language system (Albanian and German) and building a stunning, dark-themed interactive map for the "Toka" (Real Estate) page.
+
+📋 Copy and Paste this Prompt:
+Role & Context:
+We are continuing the development of the "KahKosova" web app (React, Vite, Tailwind CSS, shadcn/ui). The app currently features a dark theme with Albanian Red (#E41E26) accents.
+
+I need you to implement two major architectural and feature upgrades:
+
+Implement a seamless Bilingual system switching exactly between Albanian (Shqip - default) and German (Deutsch).
+
+Build a fully functional, interactive Real Estate Map for the "Toka" (Land/Property) page.
+
+Phase 1: Bilingual Architecture (Shqip & Deutsch)
+
+Implementation: Create a robust translation system. You can use a lightweight custom React Context (LanguageContext) or react-i18next.
+
+The Toggle: Update the Navbar's language toggle to switch between AL and DE. Ensure the selected language state persists (e.g., using localStorage).
+
+Translation Scope: Refactor the "Toka" page and the main navigation to use this dictionary.
+
+Dictionary Keys needed (AL / DE):
+
+Map Title: "Harta e Pronave" / "Immobilienkarte"
+
+Price: "Çmimi" / "Preis"
+
+Area: "Sipërfaqja" / "Fläche"
+
+Location: "Lokacioni" / "Standort"
+
+Buy/Invest: "Investo" / "Investieren"
+
+Phase 2: The Interactive Map ("Toka" Page)
+
+Library: Use react-leaflet and leaflet (it avoids API key requirements during this prototyping phase).
+
+Map Styling (Crucial): The map MUST match our dark UI. Use a dark tile layer (e.g., CartoDB Dark Matter: https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png).
+
+Default View: Center the map strictly on Kosovo (Latitude: 42.6026, Longitude: 20.9030) with a default zoom level of 9.
+
+Custom Markers: Do not use default blue Leaflet pins. Create a custom HTML marker or use an SVG icon that uses our primary Albanian Red (#E41E26).
+
+Mock Data: Generate an array of 4-5 realistic mock properties across Kosovo (e.g., Prishtinë, Prizren, Pejë, Gjilan). Each object should have: id, lat, lng, title, price (in EUR), area (in m²), and an image placeholder (use Unsplash architecture/land URLs).
+
+Interactivity:
+
+When a user clicks a red pin on the map, trigger a shadcn/ui Sheet (sliding in from the right) OR a well-styled Leaflet Popup.
+
+The popup/sheet must display the property image, translated labels (using the new AL/DE system), the specific data, and a primary red "Invest" CTA button.
+
+Execution Steps for the AI:
+
+Install leaflet, react-leaflet, and any needed i18n dependencies.
+
+Set up the Language Context/Provider and update the Navbar toggle.
+
+Create the TokaMap.tsx component with the dark tile layer and custom red markers.
+
+Wire the map markers to display the property details UI, ensuring all text relies on the active language state.
+
+Render this map securely within the /toka route layout.
+
+Output a summary of the generated files and confirm the bilingual toggle works across the map UI.

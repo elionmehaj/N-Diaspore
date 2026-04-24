@@ -1,0 +1,19 @@
+packages:
+  "framer-motion": "Animations and page transitions for a premium feel"
+  "react-hook-form": "Form state management"
+  "@hookform/resolvers": "Zod schema validation for forms"
+  "zod": "Schema definition and validation"
+  "date-fns": "Date formatting for news and activity items"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging tailwind classes safely"
+images:
+  - path: "artifacts/kahkosova/public/images/logo.png"
+    description: "A modern, minimalist logo mark featuring the letter K in a bold vibrant blue circle, sleek and trustworthy, geometric style, dark background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/kahkosova/public/images/auth-bg.png"
+    description: "Abstract dark charcoal background with subtle deep blue glowing orbs and topographic lines, premium tech aesthetic"
+    aspect_ratio: "16:9"
+notes:
+  - No backend provided yet, using a local mock AuthContext for authentication state.
+  - Using wouter for routing.
+  - Implemented client-side mock data for all services (gifts, lands, news) to demonstrate full UI.

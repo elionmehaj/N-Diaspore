@@ -1,0 +1,66 @@
+Role & Context:
+We are continuing the development of the "KahKosova" React app (React, Vite, Tailwind CSS, shadcn/ui), which features a bilingual (AL/DE) interface and an "Albanian Dark" theme (Black background, Red accents).
+
+Core Objective: Integrate the specific provided logo, and overhaul the homepage hero background to feature a slowly alternating, high-contrast, city-based image slideshow.
+
+Phase 1: Logo Integration
+
+Requirement: Use the exact logo from the provided image asset image_0.png.
+
+Navbar: Replace any text-based branding in the Global Navbar with the full KahKosova logo.
+
+Footers/Auth Pages: Ensure the logo is consistently used on the Sign In/Sign Up pages and in the footer, scaling it appropriately for different contexts.
+
+Styling: Maintain the deep blue background for the navbar to allow the orange-gradient text and wave icon to stand out clearly.
+
+Phase 2: Homepage Hero Background — The alternating City Slideshow
+
+Implementation: Create a full-screen, background image component with smooth transitions. Use React hooks (useState, useEffect) and setInterval to manage the timing.
+
+The Sequence: The images must rotate in this specific order:
+
+Prishtina
+
+Peja
+
+Prizren
+
+Gjilan
+
+Ferizaj
+
+Gjakova
+
+Mitrovica
+
+(Loop back to Prishtina)
+
+The Timing: The images must alternate slowly, exactly every 5 seconds. The transition between images must be a smooth cross-fade (e.g., using Tailwind transition-opacity duration-1000 or an animation library).
+
+The Source: The AI should select 7 high-resolution, professional-grade landscape or city-view photos of these specific cities, styled to look stunning in a dark-mode environment.
+
+Phase 3: Image Styling & Contrast (Crucial)
+
+Goal: All content (the new logo, the bilingual headline "Ura juaj digjitale me Kosovën", and the stats) must remain highly readable against the background.
+
+Implementation:
+
+Apply a dark overlay (a semi-transparent black layer, e.g., bg-black/60 or a gradient) to all background images.
+
+All text placed over these images must be white or light gray.
+
+Ensure all CTA buttons (using the #E41E26 red accent) retain high visibility against the darkened background.
+
+Execution Instructions for the AI:
+
+Integrate the image_0.png logo into the navigation and branding positions.
+
+Create the background slideshow component for the homepage hero.
+
+Implement the 5-second image alternation logic using the specified city list.
+
+Ensure smooth cross-fade transitions.
+
+Apply the necessary dark overlays for perfect text contrast.
+
+Verify that the bilingual toggling (AL/DE) and existing red/black aesthetic remain intact.

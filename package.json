@@ -1,0 +1,21 @@
+{
+  "name": "kahkosova-monorepo",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,magenta\" \"pnpm --filter @workspace/kahkosova run dev\" \"pnpm --filter @workspace/api-server run dev\"",
+    "dev:frontend": "pnpm --filter @workspace/kahkosova run dev",
+    "dev:backend": "pnpm --filter @workspace/api-server run dev",
+    "build": "pnpm --filter @workspace/* run build",
+    "install:all": "pnpm install",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --if-present run typecheck",
+    "typecheck:libs": "tsc --build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "~5.9.2",
+    "prettier": "^3.8.1"
+  }
+}
+

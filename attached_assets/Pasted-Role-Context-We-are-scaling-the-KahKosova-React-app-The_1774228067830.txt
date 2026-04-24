@@ -1,0 +1,56 @@
+Role & Context:
+We are scaling the "KahKosova" React app. The goal is to make the entire application 100% bilingual (Albanian/Shqip & German/Deutsch) and add two new high-value pages. The aesthetic remains "Albanian Dark" (Black background #0A0A0A, Albanian Red #E41E26 accents).
+
+Phase 1: Global i18n Implementation (The Translation Engine)
+
+Framework: Implement react-i18next or a robust Custom Context.
+
+Requirement: NO MORE HARDCODED TEXT. All strings must be pulled from a translations.json or a structured object.
+
+The Toggle: The Navbar toggle must switch the entire site’s state between AL and DE.
+
+Scope: Translate every button, heading, footer link, and form label across:
+
+Ballina (Home), Shërbimet (Services), Toka (Land), Lajme (News), Rreth Nesh (About), Dashboard.
+
+Sign In / Sign Up forms.
+
+Phase 2: Interactive Property Map (The "Toka" Page)
+
+Library: react-leaflet with CartoDB Dark Matter tiles.
+
+Target: Center on Kosovo (42.6026, 20.9030).
+
+Features: Use Red custom markers (#E41E26). When clicked, open a shadcn/ui Sheet (Right Sidebar) showing property details (Image, Price, Area, Location) in the active language.
+
+Phase 3: Two New Feature Pages
+
+1. Gjurmët (Family Roots / Genealogy) — /gjurmet
+
+Concept: A tool for the diaspora to trace family history or find records in Kosovo.
+
+UI Build: A "Search the Archives" hero section. Below, a vertical Timeline component (shadcn) showing "Historical Milestones of your Region." Add a "Kërko Arkivën" (Search Archive) form with fields for Surname and Village of Origin.
+
+2. Bizneset (Diaspora Business Directory) — /bizneset
+
+Concept: A "Yelp" for Kosovo, highlighting businesses owned by or serving the diaspora.
+
+UI Build: A grid of cards with category filters (Gastronomy, Tech, Craftsmanship). Each card has a "Verified" badge in Red, a star rating, and a "Vizito faqen" (Visit Site) button.
+
+Phase 4: Deep Service Updates
+
+Update the Shëndeti (Healthcare) and Investime (Investment) pages to include bilingual descriptions and tooltips in German for users who may not be fluent in technical Albanian medical/financial terms.
+
+Execution Instructions:
+
+Set up the i18n infrastructure first.
+
+Move all existing Albanian text into the AL dictionary.
+
+Generate the DE (German) equivalents for all text.
+
+Build the Interactive Map for /toka.
+
+Create the /gjurmet and /bizneset pages with full bilingual support.
+
+Ensure all Red/Black styling remains consistent.

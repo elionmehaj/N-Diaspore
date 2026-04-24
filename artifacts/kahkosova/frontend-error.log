@@ -1,0 +1,55 @@
+﻿
+> @workspace/kahkosova@0.0.0 dev C:\Users\Compro\OneDrive\Desktop\kahKosova\artifacts\kahkosova
+> vite --config vite.config.ts --host 0.0.0.0
+
+node.exe : [31mfailed to load config from C:\Users\Com
+pro\OneDrive\Desktop\kahKosova\artifacts\kahkosova\vite
+.config.ts[39m
+At C:\Users\Compro\AppData\Roaming\npm\pnpm.ps1:24 
+char:5
++     & "node$exe"  
+"$basedir/node_modules/pnpm/bin/pnpm.cjs" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([31mfail 
+   ed to ....config.ts[39m:String) [], RemoteExcepti  
+  on
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31merror when starting dev server:
+Error: PORT environment variable is required but was 
+not provided.
+    at file:///C:/Users/Compro/OneDrive/Desktop/kahKoso
+va/artifacts/kahkosova/node_modules/.vite-temp/vite.con
+fig.ts.timestamp-1774230574090-4e8fdb67550ce8.mjs:10:9
+    at ModuleJob.run 
+(node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ 
+(node:internal/modules/esm/loader:661:26)
+    at async loadConfigFromBundledFile (file:///C:/User
+s/Compro/OneDrive/Desktop/kahKosova/node_modules/.pnpm/
+vite@7.3.1_@types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2
+c9d32/node_modules/vite/dist/node/chunks/config.js:3590
+9:12)
+    at async bundleAndLoadConfigFile (file:///C:/Users/
+Compro/OneDrive/Desktop/kahKosova/node_modules/.pnpm/vi
+te@7.3.1_@types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2c9
+d32/node_modules/vite/dist/node/chunks/config.js:35797:
+17)
+    at async loadConfigFromFile (file:///C:/Users/Compr
+o/OneDrive/Desktop/kahKosova/node_modules/.pnpm/vite@7.
+3.1_@types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2c9d32/n
+ode_modules/vite/dist/node/chunks/config.js:35764:42)
+    at async resolveConfig (file:///C:/Users/Compro/One
+Drive/Desktop/kahKosova/node_modules/.pnpm/vite@7.3.1_@
+types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2c9d32/node_m
+odules/vite/dist/node/chunks/config.js:35413:22)
+    at async _createServer (file:///C:/Users/Compro/One
+Drive/Desktop/kahKosova/node_modules/.pnpm/vite@7.3.1_@
+types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2c9d32/node_m
+odules/vite/dist/node/chunks/config.js:25362:67)
+    at async CAC.<anonymous> (file:///C:/Users/Compro/O
+neDrive/Desktop/kahKosova/node_modules/.pnpm/vite@7.3.1
+_@types+node@25.3_847d3f1dfd8a5a4dca3b40dafc2c9d32/node
+_modules/vite/dist/node/cli.js:572:18)[39m
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

@@ -1,0 +1,50 @@
+Project Name: KahKosova
+Project Goal: Build a fully responsive, modern web application serving the Kosovo diaspora. 
+Design System: I have uploaded an image of the template I want to use. Please extract the exact color palette, typography, card styling, and overall layout structure from this uploaded image and apply it globally across the app. Use real, high-quality placeholder images from Unsplash (keywords: Kosovo, Prishtina, diaspora, family, agriculture, modern tech) rather than generic illustrations.
+
+Tech Stack: React, Tailwind CSS, shadcn/ui, Lucide Icons, and React Router.
+
+Please build the following global components and pages:
+
+1. GLOBAL COMPONENTS
+- Navbar: Sticky top navigation. Must include the "KahKosova" logo, links to (Home, Services, News, About, Contact), a Language Toggle dropdown (AL/EN/DE), and "Log In / Sign Up" buttons. If a user is logged in, replace auth buttons with a "Dashboard" button and a user avatar profile dropdown.
+- Footer: Clean design containing links to all pages, Terms of Service, Privacy Policy, social media icons, and a legal disclaimer stating: "We provide software tools, not legal representation."
+- Responsiveness: The entire app must be fully responsive (mobile, tablet, desktop) using Tailwind's breakpoint system.
+
+2. AUTHENTICATION (Sign In / Sign Up)
+- Create beautiful, modern Sign In and Sign Up pages.
+- Include fields for Email, Password, and "Sign in with Google/Apple" social buttons.
+- On successful login, route the user to the Dashboard.
+
+3. HOME PAGE
+- Hero Section: A highly visual section with a real background image of Kosovo. Headline: "Your Digital Bridge to Kosovo." Subheadline: "Manage land, handle bureaucracy, and support family from anywhere." Primary CTA: "Explore Services."
+- Features Grid: 3 visually distinct cards highlighting the main pillars (Toka/Land, Familja/Gifting, Letrat/Bureaucracy).
+- Trust Section: A brief section explaining our secure, pay-as-you-go model.
+
+4. USER DASHBOARD (Protected Route)
+- A clean control center greeting the user by name.
+- A sidebar or top-tab navigation.
+- Main area displaying a grid of all available services (Land Leasing, Gift Gateway, Return Checklist, Bilingual Forms).
+- Sections for "Recent Activity" (e.g., generated forms, sent gifts) and "Saved Items".
+
+5. SERVICE PAGES (Individual Pages)
+- Service 1: Gift Gateway (Bli Për Familjen): An e-commerce style page displaying a grid of gift packages (Groceries, Cakes, Flowers) with prices, vendor badges, and a "Send to Kosovo" checkout button.
+- Service 2: Return-to-Kosovo Checklist: A clean UI introducing the step-by-step compliance and tax guide. Include a "Start Questionnaire" button.
+- Service 3: Bilingual Form Builder: A split-screen UI layout. Left side: A clean input form (Name, ID, Purpose). Right side: A visual preview of a PDF document updating in real-time.
+
+6. LAND LEASING PAGE (Toka)
+- A split layout. One half contains an interactive map of Kosovo (using Leaflet or a React map library). 
+- The map should have clickable map pins representing available land.
+- The other half should be a scrollable list of property cards (showing hectares, municipality, and price). 
+- Clicking a card centers the map on that pin.
+
+7. NEWS PORTAL
+- A dedicated "Diaspora News" page styled like a modern news portal.
+- Include a "Featured Article" hero section.
+- Below it, a masonry or grid layout of article cards (Image, Headline, Date, snippet). Topics should revolve around diaspora laws, flights, and culture.
+
+8. ABOUT & CONTACT PAGES
+- About Page: A storytelling page about the mission of KahKosova connecting the diaspora to the homeland, featuring a modern layout with images.
+- Contact Page: A functional contact form (Name, Email, Subject, Message) and a FAQ accordion section (using shadcn accordion) addressing common diaspora questions.
+
+Please build the initial routing structure and the Home Page first, and then I will prompt you to build out the remaining pages one by one. Ensure the UI strictly matches the uploaded template's vibe.

@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /transport/search:
+    get:
+      operationId: transportSearch
+      tags: [transport]
+      summary: Search for transport tickets
+      description: Returns an array of ticket options based on search parameters
+      parameters:
+        - name: origin
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: destination
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [flight, bus]
+        - name: passengers
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        departureTime:
+          type: string
+          format: date-time
+        arrivalTime:
+          type: string
+          format: date-time
+        duration:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        isDirect:
+          type: boolean
+      required:
+        - id
+        - provider
+        - departureTime
+        - arrivalTime
+        - duration
+        - price
+        - currency
+        - isDirect
