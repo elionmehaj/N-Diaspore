@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getDb } from "../agents-core/db";
-import Groq from "groq-sdk";
+import { Groq } from "groq-sdk";
 import config from "../agents-core/config";
 
 const router = Router();
