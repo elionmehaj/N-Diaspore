@@ -1,15 +1,14 @@
 {
   "version": 2,
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "lib/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/artifacts/api-server/src/app.ts"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/backend",
-      "destination": "/api/healthz"
+      "destination": "/api/index.ts"
     }
   ]
 }

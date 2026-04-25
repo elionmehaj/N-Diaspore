@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from "express";
-import { TransportSearchQueryParams } from "@workspace/api-zod";
+import { TransportSearchQueryParams } from "../../../../lib/api-zod/src/index.js";
 import pino from "pino";
 
 const logger = pino({ name: "transport-route" });
