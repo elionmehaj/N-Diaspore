@@ -23,6 +23,10 @@ export async function connect(): Promise<Db> {
       console.log('[DB] Local MongoDB available');
     } catch (localErr) {
       // Local MongoDB not available — use in-memory
+      if (process.env.VERCEL) {
+        console.error('[DB] MONGODB_URI not provided and local MongoDB unavailable. In-memory DB is not supported on Vercel.');
+        throw new Error('MONGODB_URI environment variable is required on Vercel.');
+      }
       console.log('[DB] Local MongoDB not available — starting in-memory MongoDB...');
       memServer = await MongoMemoryServer.create();
       uri = memServer.getUri();

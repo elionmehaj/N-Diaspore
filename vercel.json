@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.ts": {
-      "includeFiles": "lib/**"
+      "includeFiles": "{lib,artifacts}/**"
     }
   },
   "rewrites": [
