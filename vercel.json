@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/artifacts/api-server/src/app.ts"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/backend",
+      "destination": "/api/healthz"
+    }
+  ]
+}

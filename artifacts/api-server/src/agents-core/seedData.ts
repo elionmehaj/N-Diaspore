@@ -1,4 +1,4 @@
-import { connect, close } from './db';
+import { connect, close } from './db.js';
 
 const airlines = [
   { name: 'Wizz Air', code: 'W6', logo: 'wizzair' },

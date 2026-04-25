@@ -1,8 +1,8 @@
 import cron from 'node-cron';
-import config from './config';
-import aeroScout from './aeroScout';
-import transitScout from './transitScout';
-import routeAnalyzer from './routeAnalyzer';
+import config from './config.js';
+import aeroScout from './aeroScout.js';
+import transitScout from './transitScout.js';
+import routeAnalyzer from './routeAnalyzer.js';
 import type { Server } from 'socket.io';
 
 let io: Server | null = null;

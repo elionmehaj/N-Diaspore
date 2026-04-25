@@ -1,6 +1,6 @@
 import Groq from 'groq-sdk';
-import config from './config';
-import { getDb } from './db';
+import config from './config.js';
+import { getDb } from './db.js';
 
 // ─── Capabilities Manifest ────────────────────────────────────────────────────
 // This is injected into every system prompt. It tells the LLM exactly what

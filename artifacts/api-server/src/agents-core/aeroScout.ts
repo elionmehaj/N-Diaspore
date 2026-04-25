@@ -1,5 +1,5 @@
-import { getDb } from './db';
-import { generateFlights } from './seedData';
+import { getDb } from './db.js';
+import { generateFlights } from './seedData.js';
 
 class AeroScout {
   name: string = 'AeroScout';

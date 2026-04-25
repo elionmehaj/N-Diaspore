@@ -1,6 +1,6 @@
 import { MongoClient, Db } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import config from './config';
+import config from './config.js';
 
 let db: Db | null = null;
 let client: MongoClient | null = null;

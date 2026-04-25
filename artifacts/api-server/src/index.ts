@@ -1,11 +1,11 @@
-import app from "./app";
-import { logger } from "./lib/logger";
+import app from "./app.js";
+import { logger } from "./lib/logger.js";
 
 import http from "http";
 import { Server } from "socket.io";
-import { connect } from "./agents-core/db";
-import scheduler from "./agents-core/scheduler";
-import customerConcierge from "./agents-core/customerConcierge";
+import { connect } from "./agents-core/db.js";
+import scheduler from "./agents-core/scheduler.js";
+import customerConcierge from "./agents-core/customerConcierge.js";
 
 const rawPort = process.env["PORT"];
 

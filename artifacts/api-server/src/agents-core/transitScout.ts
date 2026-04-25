@@ -1,5 +1,5 @@
-import { getDb } from './db';
-import { generateBuses } from './seedData';
+import { getDb } from './db.js';
+import { generateBuses } from './seedData.js';
 
 class TransitScout {
   name: string = 'TransitScout';

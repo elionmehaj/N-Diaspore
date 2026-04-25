@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getDb } from "../agents-core/db";
+import { getDb } from "../agents-core/db.js";
 import { Groq } from "groq-sdk";
-import config from "../agents-core/config";
+import config from "../agents-core/config.js";
 
 const router = Router();
 
