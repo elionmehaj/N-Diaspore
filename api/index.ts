@@ -6,7 +6,6 @@ const DATABASE_BACKED_PREFIXES = [
   "/api/flights",
   "/api/buses",
   "/api/dates",
-  "/api/chat",
 ];
 
 function ensureDatabase() {

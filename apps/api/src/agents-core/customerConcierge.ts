@@ -496,16 +496,27 @@ ${CAPABILITIES_MANIFEST}
 
       const isTravelQuery = ['search_flights', 'search_buses', 'best_dates'].includes(intentData.intent);
 
-      // Only query MongoDB if we need trip data
+      // Only query MongoDB if we need trip data. Chat should still work as an
+      // LLM concierge if the trip database is temporarily unavailable.
       if (!intentData.isGreeting && isTravelQuery) {
-        cards = await this.queryTrips(intentData);
+        try {
+          cards = await this.queryTrips(intentData);
+        } catch (err) {
+          this.log(`Trip query unavailable: ${err instanceof Error ? err.message : String(err)}`);
+          cards = [];
+        }
       }
 
       if (intentData.intent === 'best_dates') {
-        bestDates = await this.getBestDates(
-          intentData.query.origin || 'Prishtina',
-          intentData.query.destination,
-        );
+        try {
+          bestDates = await this.getBestDates(
+            intentData.query.origin || 'Prishtina',
+            intentData.query.destination,
+          );
+        } catch (err) {
+          this.log(`Best-dates query unavailable: ${err instanceof Error ? err.message : String(err)}`);
+          bestDates = [];
+        }
       }
 
       const tripContext = isTravelQuery ? this.formatTripsForContext(cards) : '';
