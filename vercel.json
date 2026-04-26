@@ -5,7 +5,7 @@
   "outputDirectory": "public",
   "functions": {
     "api/index.ts": {
-      "includeFiles": "{lib,artifacts}/**",
+      "includeFiles": "{lib,apps}/**",
       "memory": 1024,
       "maxDuration": 15
     }

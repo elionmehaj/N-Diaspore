@@ -20,9 +20,130 @@ export interface Ticket {
   isDirect: boolean;
 }
 
+export interface FlightDeal {
+  id: string;
+  origin: string;
+  destination: string;
+  airline: string;
+  airlineCode?: string;
+  operatorLogo?: string;
+  price: number;
+  currency: string;
+  duration?: number;
+  layovers?: number;
+  departureTime?: string;
+  arrivalTime?: string;
+  categoryTag?: string;
+  link?: string;
+}
+
+export interface FlightDealsResponse {
+  count: number;
+  data: FlightDeal[];
+}
+
+export interface BusRouteDeal {
+  id: string;
+  origin: string;
+  destination: string;
+  operator: string;
+  operatorLogo?: string;
+  price: number;
+  currency: string;
+  duration?: number;
+  departureTime?: string;
+  arrivalTime?: string;
+  categoryTag?: string;
+  link?: string;
+}
+
+export interface BusRoutesResponse {
+  count: number;
+  data: BusRouteDeal[];
+}
+
+export interface BestDateRoute {
+  origin: string;
+  destination: string;
+  type: string;
+  price: number;
+}
+
+export interface BestDateSummary {
+  /** @pattern ^\d{4}-\d{2}-\d{2}$ */
+  date: string;
+  avgPrice: number;
+  routeCount: number;
+  routes?: BestDateRoute[];
+}
+
+export interface BestDatesResponse {
+  count: number;
+  data: BestDateSummary[];
+}
+
+export type ConciergeTripCardType =
+  (typeof ConciergeTripCardType)[keyof typeof ConciergeTripCardType];
+
+export const ConciergeTripCardType = {
+  flight: "flight",
+  bus: "bus",
+} as const;
+
+export interface ConciergeTripCard {
+  id?: string;
+  type?: ConciergeTripCardType;
+  origin?: string;
+  originCity?: string;
+  destination?: string;
+  destinationCity?: string;
+  operator?: string;
+  airline?: string;
+  price: number;
+  currency?: string;
+  duration?: number;
+  layovers?: number;
+  departureTime?: string;
+  arrivalTime?: string;
+  categoryTag?: string;
+  link?: string;
+}
+
+export interface SiteRoute {
+  path: string;
+  label: string;
+  reason: string;
+  isLive: boolean;
+}
+
+export interface ChatRequest {
+  message: string;
+  sessionId?: string;
+}
+
+export interface ChatResponse {
+  sessionId: string;
+  message: string;
+  intent?: string;
+  siteRoutes?: SiteRoute[];
+  cards?: ConciergeTripCard[];
+  bestDates?: string[] | BestDateSummary[];
+  timestamp?: string;
+}
+
+export interface ErrorResponse {
+  error: boolean | string;
+  message?: string;
+  /** Additional validation details */
+  details?: unknown;
+}
+
 export type TransportSearchParams = {
   origin: string;
   destination: string;
+  /**
+   * @pattern ^\d{4}-\d{2}-\d{2}$
+   */
   date: string;
   type: TransportSearchType;
   passengers: number;

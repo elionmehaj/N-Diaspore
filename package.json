@@ -12,7 +12,7 @@
     "build": "pnpm run typecheck:libs && pnpm --filter @workspace/api-server run build && pnpm --filter @workspace/kahkosova run build && node scripts/ensure-vercel-public.mjs",
 
     "install:all": "pnpm install",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --if-present run typecheck",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./apps/**\" --filter \"./tools/**\" --if-present run typecheck",
     "typecheck:libs": "tsc --build"
   },
   "devDependencies": {

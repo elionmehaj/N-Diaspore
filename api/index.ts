@@ -1,7 +1,13 @@
-import app from "../artifacts/api-server/src/app.js";
-import { connect } from "../artifacts/api-server/src/agents-core/db.js";
+import app from "../apps/api/src/app.js";
+import { connect } from "../apps/api/src/agents-core/db.js";
 
 let databaseReady: Promise<void> | null = null;
+const DATABASE_BACKED_PREFIXES = [
+  "/api/flights",
+  "/api/buses",
+  "/api/dates",
+  "/api/chat",
+];
 
 function ensureDatabase() {
   if (!databaseReady) {
@@ -17,7 +23,11 @@ function ensureDatabase() {
 }
 
 export default async function handler(req: any, res: any) {
-  if (!req.url?.startsWith("/api/healthz")) {
+  const needsDatabase = DATABASE_BACKED_PREFIXES.some((prefix) =>
+    req.url?.startsWith(prefix),
+  );
+
+  if (needsDatabase) {
     try {
       await ensureDatabase();
     } catch (err) {

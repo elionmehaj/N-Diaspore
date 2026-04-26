@@ -25,7 +25,7 @@ async function list(dir) {
 async function findBuiltPublic() {
   const candidates = [
     outputDir,
-    path.resolve(cwd, "artifacts", "kahkosova", "dist", "public"),
+    path.resolve(cwd, "apps", "web", "dist", "public"),
     path.resolve(cwd, "..", "..", "public"),
   ];
 

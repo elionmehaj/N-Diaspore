@@ -1,10 +1,13 @@
 modules = ["nodejs-24"]
 
 [[artifacts]]
-id = "artifacts/api-server"
+id = "apps/api"
 
 [[artifacts]]
-id = "artifacts/mockup-sandbox"
+id = "apps/web"
+
+[[artifacts]]
+id = "tools/mockup-sandbox"
 
 [deployment]
 router = "application"

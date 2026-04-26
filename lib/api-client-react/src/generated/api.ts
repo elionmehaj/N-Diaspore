@@ -5,22 +5,31 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
 import type {
+  BestDatesResponse,
+  BusRoutesResponse,
+  ChatRequest,
+  ChatResponse,
+  ErrorResponse,
+  FlightDealsResponse,
   HealthStatus,
   Ticket,
   TransportSearchParams,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -198,3 +207,318 @@ export function useTransportSearch<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Returns the cheapest future flight deals collected by the agents
+ * @summary Get trending flight deals
+ */
+export const getGetTrendingFlightsUrl = () => {
+  return `/api/flights/trending`;
+};
+
+export const getTrendingFlights = async (
+  options?: RequestInit,
+): Promise<FlightDealsResponse> => {
+  return customFetch<FlightDealsResponse>(getGetTrendingFlightsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetTrendingFlightsQueryKey = () => {
+  return [`/api/flights/trending`] as const;
+};
+
+export const getGetTrendingFlightsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTrendingFlights>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getTrendingFlights>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetTrendingFlightsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTrendingFlights>>
+  > = ({ signal }) => getTrendingFlights({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTrendingFlights>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetTrendingFlightsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTrendingFlights>>
+>;
+export type GetTrendingFlightsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get trending flight deals
+ */
+
+export function useGetTrendingFlights<
+  TData = Awaited<ReturnType<typeof getTrendingFlights>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getTrendingFlights>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTrendingFlightsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns future bus route deals collected by the agents
+ * @summary Get bus route deals
+ */
+export const getGetBusRoutesUrl = () => {
+  return `/api/buses/routes`;
+};
+
+export const getBusRoutes = async (
+  options?: RequestInit,
+): Promise<BusRoutesResponse> => {
+  return customFetch<BusRoutesResponse>(getGetBusRoutesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetBusRoutesQueryKey = () => {
+  return [`/api/buses/routes`] as const;
+};
+
+export const getGetBusRoutesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getBusRoutes>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getBusRoutes>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetBusRoutesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getBusRoutes>>> = ({
+    signal,
+  }) => getBusRoutes({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getBusRoutes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetBusRoutesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getBusRoutes>>
+>;
+export type GetBusRoutesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get bus route deals
+ */
+
+export function useGetBusRoutes<
+  TData = Awaited<ReturnType<typeof getBusRoutes>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getBusRoutes>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetBusRoutesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns aggregated low-price travel dates from analyzed trips
+ * @summary Get best travel dates
+ */
+export const getGetBestDatesUrl = () => {
+  return `/api/dates/best`;
+};
+
+export const getBestDates = async (
+  options?: RequestInit,
+): Promise<BestDatesResponse> => {
+  return customFetch<BestDatesResponse>(getGetBestDatesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetBestDatesQueryKey = () => {
+  return [`/api/dates/best`] as const;
+};
+
+export const getGetBestDatesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getBestDates>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getBestDates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetBestDatesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getBestDates>>> = ({
+    signal,
+  }) => getBestDates({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getBestDates>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetBestDatesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getBestDates>>
+>;
+export type GetBestDatesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get best travel dates
+ */
+
+export function useGetBestDates<
+  TData = Awaited<ReturnType<typeof getBestDates>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getBestDates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetBestDatesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Sends a user message to the CustomerConcierge agent
+ * @summary Send a concierge chat message
+ */
+export const getPostChatUrl = () => {
+  return `/api/chat`;
+};
+
+export const postChat = async (
+  chatRequest: ChatRequest,
+  options?: RequestInit,
+): Promise<ChatResponse> => {
+  return customFetch<ChatResponse>(getPostChatUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(chatRequest),
+  });
+};
+
+export const getPostChatMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postChat>>,
+    TError,
+    { data: BodyType<ChatRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postChat>>,
+  TError,
+  { data: BodyType<ChatRequest> },
+  TContext
+> => {
+  const mutationKey = ["postChat"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postChat>>,
+    { data: BodyType<ChatRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postChat(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostChatMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postChat>>
+>;
+export type PostChatMutationBody = BodyType<ChatRequest>;
+export type PostChatMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Send a concierge chat message
+ */
+export const usePostChat = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postChat>>,
+    TError,
+    { data: BodyType<ChatRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postChat>>,
+  TError,
+  { data: BodyType<ChatRequest> },
+  TContext
+> => {
+  return useMutation(getPostChatMutationOptions(options));
+};

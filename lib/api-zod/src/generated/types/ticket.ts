@@ -9,8 +9,8 @@
 export interface Ticket {
   id: string;
   provider: string;
-  departureTime: Date;
-  arrivalTime: Date;
+  departureTime: string;
+  arrivalTime: string;
   duration: string;
   price: number;
   currency: string;

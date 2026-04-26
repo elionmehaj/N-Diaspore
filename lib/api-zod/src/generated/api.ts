@@ -19,10 +19,14 @@ export const HealthCheckResponse = zod.object({
  * Returns an array of ticket options based on search parameters
  * @summary Search for transport tickets
  */
+export const transportSearchQueryDateRegExp = new RegExp(
+  "^\\d{4}-\\d{2}-\\d{2}$",
+);
+
 export const TransportSearchQueryParams = zod.object({
   origin: zod.coerce.string(),
   destination: zod.coerce.string(),
-  date: zod.date(),
+  date: zod.coerce.string().regex(transportSearchQueryDateRegExp),
   type: zod.enum(["flight", "bus"]),
   passengers: zod.coerce.number(),
 });
@@ -30,11 +34,164 @@ export const TransportSearchQueryParams = zod.object({
 export const TransportSearchResponseItem = zod.object({
   id: zod.string(),
   provider: zod.string(),
-  departureTime: zod.date(),
-  arrivalTime: zod.date(),
+  departureTime: zod.string().datetime({}),
+  arrivalTime: zod.string().datetime({}),
   duration: zod.string(),
   price: zod.number(),
   currency: zod.string(),
   isDirect: zod.boolean(),
 });
 export const TransportSearchResponse = zod.array(TransportSearchResponseItem);
+
+/**
+ * Returns the cheapest future flight deals collected by the agents
+ * @summary Get trending flight deals
+ */
+export const GetTrendingFlightsResponse = zod.object({
+  count: zod.number(),
+  data: zod.array(
+    zod.object({
+      id: zod.string(),
+      origin: zod.string(),
+      destination: zod.string(),
+      airline: zod.string(),
+      airlineCode: zod.string().optional(),
+      operatorLogo: zod.string().optional(),
+      price: zod.number(),
+      currency: zod.string(),
+      duration: zod.number().optional(),
+      layovers: zod.number().optional(),
+      departureTime: zod.string().datetime({}).optional(),
+      arrivalTime: zod.string().datetime({}).optional(),
+      categoryTag: zod.string().optional(),
+      link: zod.string().optional(),
+    }),
+  ),
+});
+
+/**
+ * Returns future bus route deals collected by the agents
+ * @summary Get bus route deals
+ */
+export const GetBusRoutesResponse = zod.object({
+  count: zod.number(),
+  data: zod.array(
+    zod.object({
+      id: zod.string(),
+      origin: zod.string(),
+      destination: zod.string(),
+      operator: zod.string(),
+      operatorLogo: zod.string().optional(),
+      price: zod.number(),
+      currency: zod.string(),
+      duration: zod.number().optional(),
+      departureTime: zod.string().datetime({}).optional(),
+      arrivalTime: zod.string().datetime({}).optional(),
+      categoryTag: zod.string().optional(),
+      link: zod.string().optional(),
+    }),
+  ),
+});
+
+/**
+ * Returns aggregated low-price travel dates from analyzed trips
+ * @summary Get best travel dates
+ */
+export const getBestDatesResponseDataItemDateRegExp = new RegExp(
+  "^\\d{4}-\\d{2}-\\d{2}$",
+);
+
+export const GetBestDatesResponse = zod.object({
+  count: zod.number(),
+  data: zod.array(
+    zod.object({
+      date: zod.string().regex(getBestDatesResponseDataItemDateRegExp),
+      avgPrice: zod.number(),
+      routeCount: zod.number(),
+      routes: zod
+        .array(
+          zod.object({
+            origin: zod.string(),
+            destination: zod.string(),
+            type: zod.string(),
+            price: zod.number(),
+          }),
+        )
+        .optional(),
+    }),
+  ),
+});
+
+/**
+ * Sends a user message to the CustomerConcierge agent
+ * @summary Send a concierge chat message
+ */
+export const PostChatBody = zod.object({
+  message: zod.string(),
+  sessionId: zod.string().optional(),
+});
+
+export const postChatResponseBestDatesTwoItemDateRegExp = new RegExp(
+  "^\\d{4}-\\d{2}-\\d{2}$",
+);
+
+export const PostChatResponse = zod.object({
+  sessionId: zod.string(),
+  message: zod.string(),
+  intent: zod.string().optional(),
+  siteRoutes: zod
+    .array(
+      zod.object({
+        path: zod.string(),
+        label: zod.string(),
+        reason: zod.string(),
+        isLive: zod.boolean(),
+      }),
+    )
+    .optional(),
+  cards: zod
+    .array(
+      zod.object({
+        id: zod.string().optional(),
+        type: zod.enum(["flight", "bus"]).optional(),
+        origin: zod.string().optional(),
+        originCity: zod.string().optional(),
+        destination: zod.string().optional(),
+        destinationCity: zod.string().optional(),
+        operator: zod.string().optional(),
+        airline: zod.string().optional(),
+        price: zod.number(),
+        currency: zod.string().optional(),
+        duration: zod.number().optional(),
+        layovers: zod.number().optional(),
+        departureTime: zod.string().datetime({}).optional(),
+        arrivalTime: zod.string().datetime({}).optional(),
+        categoryTag: zod.string().optional(),
+        link: zod.string().optional(),
+      }),
+    )
+    .optional(),
+  bestDates: zod
+    .union([
+      zod.array(zod.string()),
+      zod.array(
+        zod.object({
+          date: zod.string().regex(postChatResponseBestDatesTwoItemDateRegExp),
+          avgPrice: zod.number(),
+          routeCount: zod.number(),
+          routes: zod
+            .array(
+              zod.object({
+                origin: zod.string(),
+                destination: zod.string(),
+                type: zod.string(),
+                price: zod.number(),
+              }),
+            )
+            .optional(),
+        }),
+      ),
+    ])
+    .optional(),
+  timestamp: zod.string().datetime({}).optional(),
+});

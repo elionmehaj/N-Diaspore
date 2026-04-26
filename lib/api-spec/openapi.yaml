@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: transport
+    description: Transport search operations
+  - name: agents
+    description: AI agent dashboard operations
+  - name: chat
+    description: AI concierge chat operations
 paths:
   /healthz:
     get:
@@ -47,7 +53,7 @@ paths:
           required: true
           schema:
             type: string
-            format: date
+            pattern: "^\\d{4}-\\d{2}-\\d{2}$"
         - name: type
           in: query
           required: true
@@ -68,6 +74,74 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Ticket"
+
+  /flights/trending:
+    get:
+      operationId: getTrendingFlights
+      tags: [agents]
+      summary: Get trending flight deals
+      description: Returns the cheapest future flight deals collected by the agents
+      responses:
+        "200":
+          description: Trending flights
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlightDealsResponse"
+
+  /buses/routes:
+    get:
+      operationId: getBusRoutes
+      tags: [agents]
+      summary: Get bus route deals
+      description: Returns future bus route deals collected by the agents
+      responses:
+        "200":
+          description: Bus routes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusRoutesResponse"
+
+  /dates/best:
+    get:
+      operationId: getBestDates
+      tags: [agents]
+      summary: Get best travel dates
+      description: Returns aggregated low-price travel dates from analyzed trips
+      responses:
+        "200":
+          description: Best dates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BestDatesResponse"
+
+  /chat:
+    post:
+      operationId: postChat
+      tags: [chat]
+      summary: Send a concierge chat message
+      description: Sends a user message to the CustomerConcierge agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: Concierge response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+        "400":
+          description: Invalid chat request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -108,3 +182,270 @@ components:
         - price
         - currency
         - isDirect
+
+    FlightDealsResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/FlightDeal"
+      required:
+        - count
+        - data
+
+    BusRoutesResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/BusRouteDeal"
+      required:
+        - count
+        - data
+
+    BestDatesResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/BestDateSummary"
+      required:
+        - count
+        - data
+
+    FlightDeal:
+      type: object
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
+        airline:
+          type: string
+        airlineCode:
+          type: string
+        operatorLogo:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        duration:
+          type: number
+        layovers:
+          type: number
+        departureTime:
+          type: string
+          format: date-time
+        arrivalTime:
+          type: string
+          format: date-time
+        categoryTag:
+          type: string
+        link:
+          type: string
+      required:
+        - id
+        - origin
+        - destination
+        - airline
+        - price
+        - currency
+
+    BusRouteDeal:
+      type: object
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
+        operator:
+          type: string
+        operatorLogo:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        duration:
+          type: number
+        departureTime:
+          type: string
+          format: date-time
+        arrivalTime:
+          type: string
+          format: date-time
+        categoryTag:
+          type: string
+        link:
+          type: string
+      required:
+        - id
+        - origin
+        - destination
+        - operator
+        - price
+        - currency
+
+    BestDateSummary:
+      type: object
+      properties:
+        date:
+          type: string
+          pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        avgPrice:
+          type: number
+        routeCount:
+          type: integer
+        routes:
+          type: array
+          items:
+            $ref: "#/components/schemas/BestDateRoute"
+      required:
+        - date
+        - avgPrice
+        - routeCount
+
+    BestDateRoute:
+      type: object
+      properties:
+        origin:
+          type: string
+        destination:
+          type: string
+        type:
+          type: string
+        price:
+          type: number
+      required:
+        - origin
+        - destination
+        - type
+        - price
+
+    ConciergeTripCard:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [flight, bus]
+        origin:
+          type: string
+        originCity:
+          type: string
+        destination:
+          type: string
+        destinationCity:
+          type: string
+        operator:
+          type: string
+        airline:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        duration:
+          type: number
+        layovers:
+          type: number
+        departureTime:
+          type: string
+          format: date-time
+        arrivalTime:
+          type: string
+          format: date-time
+        categoryTag:
+          type: string
+        link:
+          type: string
+      required:
+        - price
+
+    SiteRoute:
+      type: object
+      properties:
+        path:
+          type: string
+        label:
+          type: string
+        reason:
+          type: string
+        isLive:
+          type: boolean
+      required:
+        - path
+        - label
+        - reason
+        - isLive
+
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: string
+      required:
+        - message
+
+    ChatResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        message:
+          type: string
+        intent:
+          type: string
+        siteRoutes:
+          type: array
+          items:
+            $ref: "#/components/schemas/SiteRoute"
+        cards:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConciergeTripCard"
+        bestDates:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: array
+              items:
+                $ref: "#/components/schemas/BestDateSummary"
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - sessionId
+        - message
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          oneOf:
+            - type: boolean
+            - type: string
+        message:
+          type: string
+        details:
+          description: Additional validation details
+      required:
+        - error
