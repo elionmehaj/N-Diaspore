@@ -2,7 +2,7 @@
   "version": 2,
   "framework": null,
   "buildCommand": "pnpm run build",
-  "outputDirectory": "artifacts/kahkosova/dist/public",
+  "outputDirectory": "public",
   "functions": {
     "api/index.ts": {
       "includeFiles": "{lib,artifacts}/**",
