@@ -1,4 +1,4 @@
-import type { ConciergeSiteRoute } from "./routes";
+import type { ConciergeSiteRoute } from "./routes.js";
 
 export type TripType = "flight" | "bus";
 
