@@ -6,7 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { useTransportSearch, type TransportSearchParams } from "@workspace/api-client-react";
+import {
+  getTransportSearchQueryKey,
+  useTransportSearch,
+  type TransportSearchParams,
+} from "@workspace/api-client-react";
 
 export default function Transporti() {
   const { toast } = useToast();
@@ -24,12 +28,20 @@ export default function Transporti() {
   
   // Search Params State for query
   const [searchParams, setSearchParams] = useState<TransportSearchParams | null>(null);
+  const activeSearchParams: TransportSearchParams = searchParams ?? {
+    origin,
+    destination,
+    date,
+    type,
+    passengers: parseInt(passengers, 10),
+  };
 
   // API Query
   const { data: tickets, isLoading, isError, error } = useTransportSearch(
-    searchParams as TransportSearchParams,
+    activeSearchParams,
     {
       query: {
+        queryKey: getTransportSearchQueryKey(activeSearchParams),
         enabled: !!searchParams,
         retry: false,
       }

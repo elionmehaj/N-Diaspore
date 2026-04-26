@@ -1,9 +1,9 @@
-import { Router, type Request, type Response } from "express";
+import { Router, type IRouter, type Request, type Response } from "express";
 import { TransportSearchQueryParams } from "../../../../lib/api-zod/src/index.js";
 import pino from "pino";
 
 const logger = pino({ name: "transport-route" });
-const router = Router();
+const router: IRouter = Router();
 
 router.get("/search", async (req: Request, res: Response) => {
   try {

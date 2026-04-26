@@ -5,35 +5,55 @@ import config from './config.js';
 let db: Db | null = null;
 let client: MongoClient | null = null;
 let memServer: MongoMemoryServer | null = null;
+let connectionPromise: Promise<Db> | null = null;
+
+const mongoOptions = {
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 5000,
+};
 
 export async function connect(): Promise<Db> {
   if (db) return db;
+  if (connectionPromise) return connectionPromise;
+
+  connectionPromise = connectInternal().catch((err) => {
+    connectionPromise = null;
+    throw err;
+  });
+
+  return connectionPromise;
+}
+
+async function connectInternal(): Promise<Db> {
   try {
+    const hasMongoUri = Boolean(process.env.MONGODB_URI);
     let uri = config.mongoUri;
 
-    // Try connecting to local MongoDB first
-    try {
+    if (process.env.VERCEL && !hasMongoUri) {
+      throw new Error('MONGODB_URI environment variable is required on Vercel.');
+    }
+
+    // Local development can fall back to an in-memory MongoDB. Vercel cannot.
+    if (!hasMongoUri) {
       const testClient = new MongoClient(uri, {
         serverSelectionTimeoutMS: 3000,
         connectTimeoutMS: 3000
       });
-      await testClient.connect();
-      await testClient.db().admin().ping();
-      await testClient.close();
-      console.log('[DB] Local MongoDB available');
-    } catch (localErr) {
-      // Local MongoDB not available — use in-memory
-      if (process.env.VERCEL) {
-        console.error('[DB] MONGODB_URI not provided and local MongoDB unavailable. In-memory DB is not supported on Vercel.');
-        throw new Error('MONGODB_URI environment variable is required on Vercel.');
+
+      try {
+        await testClient.connect();
+        await testClient.db().admin().ping();
+        await testClient.close();
+        console.log('[DB] Local MongoDB available');
+      } catch (localErr) {
+        console.log('[DB] Local MongoDB not available — starting in-memory MongoDB...');
+        memServer = await MongoMemoryServer.create();
+        uri = memServer.getUri();
+        console.log('[DB] In-memory MongoDB started at:', uri);
       }
-      console.log('[DB] Local MongoDB not available — starting in-memory MongoDB...');
-      memServer = await MongoMemoryServer.create();
-      uri = memServer.getUri();
-      console.log('[DB] In-memory MongoDB started at:', uri);
     }
 
-    client = new MongoClient(uri);
+    client = new MongoClient(uri, mongoOptions);
     await client.connect();
     db = client.db('kahkosova');
     console.log('[DB] Connected to MongoDB');

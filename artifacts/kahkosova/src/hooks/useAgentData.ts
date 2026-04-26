@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const API_BASE = import.meta.env.VITE_AGENTS_API_URL || "http://localhost:4000";
+const API_BASE = (import.meta.env.VITE_AGENTS_API_URL || "").replace(/\/$/, "");
 
 // ─── Shared fetch helper ──────────────────────────────────────
 async function fetchJson<T>(url: string): Promise<T> {

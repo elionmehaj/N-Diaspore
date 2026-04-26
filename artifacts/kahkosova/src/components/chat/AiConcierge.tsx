@@ -215,9 +215,9 @@ export default function AiConcierge() {
 
   // ── Socket.io lifecycle ──
   useEffect(() => {
-    const agentsUrl = import.meta.env.VITE_AGENTS_API_URL || "http://localhost:4000";
+    const agentsUrl = (import.meta.env.VITE_AGENTS_API_URL || "").replace(/\/$/, "");
 
-    const socket = io(agentsUrl, {
+    const socket = io(agentsUrl || undefined, {
       transports: ["websocket", "polling"],
       reconnectionAttempts: 10,
       reconnectionDelay: 2000,
@@ -238,7 +238,7 @@ export default function AiConcierge() {
 
     socket.on("connect_error", (err) => {
       setSocketConnected(false);
-      setSocketError(`Backend Disconnected — Is the Agents server running on port 4000? (${err.message})`);
+      setSocketError(`Realtime backend unavailable — using HTTP fallback. (${err.message})`);
       console.error("[AiConcierge] Socket connection error:", err);
     });
 
@@ -267,7 +267,7 @@ export default function AiConcierge() {
 
   // ── Send a message ──
   const sendMessage = useCallback(
-    (text: string) => {
+    async (text: string) => {
       const trimmed = text.trim();
       if (!trimmed) return;
 
@@ -280,17 +280,60 @@ export default function AiConcierge() {
       };
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
+      setIsTyping(true);
 
-      // Emit to socket
+      // 1. Try socket first
       if (socketRef.current?.connected) {
         socketRef.current.emit("chat-message", {
           message: trimmed,
           sessionId: sessionIdRef.current,
         });
+        return;
+      }
+
+      // 2. Fallback to HTTP POST (for Vercel)
+      console.log("[AiConcierge] Socket not connected, falling back to HTTP...");
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: trimmed,
+            sessionId: sessionIdRef.current,
+          }),
+        });
+
+        if (!response.ok) throw new Error("HTTP chat failed");
+
+        const data: ChatResponse & { timestamp: string } = await response.json();
+        
+        const botMsg: ChatMessage = {
+          id: `bot_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          role: "bot",
+          text: data.message,
+          cards: data.cards,
+          siteRoutes: data.siteRoutes,
+          bestDates: data.bestDates,
+          timestamp: new Date(data.timestamp || Date.now()),
+        };
+        
+        setMessages((prev) => [...prev, botMsg]);
+      } catch (err) {
+        console.error("[AiConcierge] HTTP Fallback Error:", err);
+        const errorMsg: ChatMessage = {
+          id: `err_${Date.now()}`,
+          role: "bot",
+          text: "Sorry, I'm having trouble connecting right now. Please check your internet or try again later!",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMsg]);
+      } finally {
+        setIsTyping(false);
       }
     },
     []
   );
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -454,13 +497,14 @@ export default function AiConcierge() {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={socketConnected ? "Ask me anything about travel..." : "Connecting to server..."}
-            disabled={!socketConnected}
+            placeholder={socketConnected ? "Ask me anything about travel..." : "Ask me anything... (using HTTP)"}
             className="flex-1 bg-white/5 border-white/10 text-white placeholder:text-white/30 h-11 rounded-xl focus-visible:ring-primary/50"
+
           />
           <Button
             type="submit"
-            disabled={!socketConnected || !input.trim() || isTyping}
+            disabled={!input.trim() || isTyping}
+
             size="icon"
             className="h-11 w-11 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all disabled:opacity-30"
           >
