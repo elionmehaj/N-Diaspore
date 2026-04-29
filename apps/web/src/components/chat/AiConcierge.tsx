@@ -19,6 +19,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getAgentApiUrl, getAgentsApiBaseUrl } from "@/lib/agentApi";
 import type {
   ChatResponsePayload,
   ConciergeSiteRoute,
@@ -186,6 +187,7 @@ export default function AiConcierge() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
+  const [httpReady, setHttpReady] = useState(false);
   const [socketError, setSocketError] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -206,9 +208,16 @@ export default function AiConcierge() {
 
   // ── Socket.io lifecycle ──
   useEffect(() => {
-    const agentsUrl = (import.meta.env.VITE_AGENTS_API_URL || "").replace(/\/$/, "");
+    const agentsUrl = getAgentsApiBaseUrl();
 
-    const socket = io(agentsUrl || undefined, {
+    if (!agentsUrl) {
+      setHttpReady(true);
+      setSocketConnected(false);
+      setSocketError(null);
+      return;
+    }
+
+    const socket = io(agentsUrl, {
       transports: ["websocket", "polling"],
       reconnectionAttempts: 10,
       reconnectionDelay: 2000,
@@ -217,6 +226,7 @@ export default function AiConcierge() {
     socketRef.current = socket;
 
     socket.on("connect", () => {
+      setHttpReady(false);
       setSocketConnected(true);
       setSocketError(null);
       console.log("[AiConcierge] Connected:", socket.id);
@@ -229,7 +239,8 @@ export default function AiConcierge() {
 
     socket.on("connect_error", (err) => {
       setSocketConnected(false);
-      setSocketError(`Realtime backend unavailable — using HTTP fallback. (${err.message})`);
+      setHttpReady(true);
+      setSocketError(null);
       console.error("[AiConcierge] Socket connection error:", err);
     });
 
@@ -285,7 +296,7 @@ export default function AiConcierge() {
       // 2. Fallback to HTTP POST (for Vercel)
       console.log("[AiConcierge] Socket not connected, falling back to HTTP...");
       try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch(getAgentApiUrl("/api/chat"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -338,6 +349,7 @@ export default function AiConcierge() {
 
   // ── Render ──
   const isEmpty = messages.length === 0;
+  const backendReady = socketConnected || httpReady;
 
   return (
     <Card
@@ -355,15 +367,17 @@ export default function AiConcierge() {
               <div
                 className={cn(
                   "absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card transition-colors",
-                  socketConnected ? "bg-emerald-500" : socketError ? "bg-red-500" : "bg-zinc-500"
+                  backendReady ? "bg-emerald-500" : socketError ? "bg-red-500" : "bg-zinc-500"
                 )}
               />
             </div>
             <div>
               <CardTitle className="text-base text-white">KahKosova AI</CardTitle>
-              <p className={cn("text-xs mt-0.5", socketError ? "text-red-400" : "text-white/50")}>
+              <p className={cn("text-xs mt-0.5", socketError && !backendReady ? "text-red-400" : "text-white/50")}>
                 {socketConnected
-                  ? "Online — ready to help"
+                  ? "Online - ready to help"
+                  : httpReady
+                  ? "Online via HTTP"
                   : socketError
                   ? "Backend Disconnected"
                   : "Connecting..."}
@@ -371,7 +385,7 @@ export default function AiConcierge() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-white/40">
-            {socketConnected ? (
+            {backendReady ? (
               <Wifi className="w-3.5 h-3.5 text-emerald-500" />
             ) : socketError ? (
               <WifiOff className="w-3.5 h-3.5 text-red-400" />
@@ -381,7 +395,7 @@ export default function AiConcierge() {
           </div>
         </div>
         {/* Error banner */}
-        {socketError && (
+        {socketError && !backendReady && (
           <div className="mt-3 flex items-start gap-2 rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2">
             <span className="text-red-400 text-[11px] leading-snug">{socketError}</span>
           </div>
@@ -488,7 +502,7 @@ export default function AiConcierge() {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={socketConnected ? "Ask me anything about travel..." : "Ask me anything... (using HTTP)"}
+            placeholder={backendReady ? "Ask me anything about travel..." : "Connecting..."}
             className="flex-1 bg-white/5 border-white/10 text-white placeholder:text-white/30 h-11 rounded-xl focus-visible:ring-primary/50"
 
           />

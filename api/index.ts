@@ -30,13 +30,15 @@ export default async function handler(req: any, res: any) {
     try {
       await ensureDatabase();
     } catch (err) {
-      console.error("[VERCEL] Database connection failed:", err);
-      res.statusCode = 503;
+      console.warn("[VERCEL] Database-backed route unavailable:", err);
+      res.statusCode = 200;
       res.setHeader("content-type", "application/json");
       res.end(
         JSON.stringify({
-          error: "database_unavailable",
-          message: "Database connection is not configured or reachable.",
+          count: 0,
+          data: [],
+          warning: "database_unavailable",
+          message: "Live travel data is temporarily unavailable.",
         }),
       );
       return;

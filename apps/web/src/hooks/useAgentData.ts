@@ -10,8 +10,9 @@ import type {
   BusRouteDeal,
   FlightDeal,
 } from "@workspace/shared";
+import { getAgentsApiBaseUrl } from "@/lib/agentApi";
 
-const API_BASE = (import.meta.env.VITE_AGENTS_API_URL || "").replace(/\/$/, "");
+const API_BASE = getAgentsApiBaseUrl();
 setBaseUrl(API_BASE || null);
 
 // ─── Shared fetch helper ──────────────────────────────────────

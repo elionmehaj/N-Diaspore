@@ -68,7 +68,8 @@ async function connectInternal(): Promise<Db> {
     return db;
   } catch (err) {
     if (err instanceof Error) {
-      console.error('[DB] Connection failed:', err.message);
+      const log = process.env.VERCEL ? console.warn : console.error;
+      log('[DB] Connection failed:', err.message);
     }
     throw err;
   }
