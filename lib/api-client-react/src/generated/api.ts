@@ -21,6 +21,8 @@ import type {
   BusRoutesResponse,
   ChatRequest,
   ChatResponse,
+  ContactSubmissionRequest,
+  ContactSubmissionResponse,
   ErrorResponse,
   FlightDealsResponse,
   HealthStatus,
@@ -207,6 +209,93 @@ export function useTransportSearch<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Stores a contact form submission for follow-up
+ * @summary Submit a contact form message
+ */
+export const getPostContactUrl = () => {
+  return `/api/contact`;
+};
+
+export const postContact = async (
+  contactSubmissionRequest: ContactSubmissionRequest,
+  options?: RequestInit,
+): Promise<ContactSubmissionResponse> => {
+  return customFetch<ContactSubmissionResponse>(getPostContactUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(contactSubmissionRequest),
+  });
+};
+
+export const getPostContactMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postContact>>,
+    TError,
+    { data: BodyType<ContactSubmissionRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postContact>>,
+  TError,
+  { data: BodyType<ContactSubmissionRequest> },
+  TContext
+> => {
+  const mutationKey = ["postContact"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postContact>>,
+    { data: BodyType<ContactSubmissionRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postContact(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostContactMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postContact>>
+>;
+export type PostContactMutationBody = BodyType<ContactSubmissionRequest>;
+export type PostContactMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Submit a contact form message
+ */
+export const usePostContact = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postContact>>,
+    TError,
+    { data: BodyType<ContactSubmissionRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postContact>>,
+  TError,
+  { data: BodyType<ContactSubmissionRequest> },
+  TContext
+> => {
+  return useMutation(getPostContactMutationOptions(options));
+};
 
 /**
  * Returns the cheapest future flight deals collected by the agents

@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: transport
     description: Transport search operations
+  - name: contact
+    description: Contact submission operations
   - name: agents
     description: AI agent dashboard operations
   - name: chat
@@ -74,6 +76,44 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Ticket"
+
+  /contact:
+    post:
+      operationId: postContact
+      tags: [contact]
+      summary: Submit a contact form message
+      description: Stores a contact form submission for follow-up
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactSubmissionRequest"
+      responses:
+        "201":
+          description: Contact submission stored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSubmissionResponse"
+        "400":
+          description: Invalid contact submission
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Contact submission failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Contact submissions unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /flights/trending:
     get:
@@ -182,6 +222,47 @@ components:
         - price
         - currency
         - isDirect
+
+    ContactSubmissionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 254
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 160
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+      required:
+        - name
+        - email
+        - subject
+        - message
+
+    ContactSubmissionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        id:
+          type: string
+        message:
+          type: string
+      required:
+        - success
+        - id
+        - message
 
     FlightDealsResponse:
       type: object

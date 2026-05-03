@@ -20,6 +20,35 @@ export interface Ticket {
   isDirect: boolean;
 }
 
+export interface ContactSubmissionRequest {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 3
+   * @maxLength 254
+   */
+  email: string;
+  /**
+   * @minLength 1
+   * @maxLength 160
+   */
+  subject: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  message: string;
+}
+
+export interface ContactSubmissionResponse {
+  success: boolean;
+  id: string;
+  message: string;
+}
+
 export interface FlightDeal {
   id: string;
   origin: string;

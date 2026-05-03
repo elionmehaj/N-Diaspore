@@ -5,7 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { TransportSearchType } from "./transportSearchType.js";
+import type { TransportSearchType } from "./transportSearchType";
 
 export type TransportSearchParams = {
   origin: string;

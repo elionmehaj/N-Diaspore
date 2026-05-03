@@ -5,9 +5,9 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { BestDateSummary } from "./bestDateSummary.js";
-import type { ConciergeTripCard } from "./conciergeTripCard.js";
-import type { SiteRoute } from "./siteRoute.js";
+import type { BestDateSummary } from "./bestDateSummary";
+import type { ConciergeTripCard } from "./conciergeTripCard";
+import type { SiteRoute } from "./siteRoute";
 
 export interface ChatResponse {
   sessionId: string;

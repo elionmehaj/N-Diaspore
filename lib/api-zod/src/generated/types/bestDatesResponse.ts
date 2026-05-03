@@ -5,7 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { BestDateSummary } from "./bestDateSummary.js";
+import type { BestDateSummary } from "./bestDateSummary";
 
 export interface BestDatesResponse {
   count: number;

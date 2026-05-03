@@ -5,7 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { BusRouteDeal } from "./busRouteDeal.js";
+import type { BusRouteDeal } from "./busRouteDeal";
 
 export interface BusRoutesResponse {
   count: number;

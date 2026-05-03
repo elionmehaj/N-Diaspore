@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,23 +6,53 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { usePostContact, type PostContactMutationError } from "@workspace/api-client-react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+
+function getContactErrorMessage(error: PostContactMutationError) {
+  return (
+    error.data?.message ||
+    error.message ||
+    "Mesazhi nuk u dergua. Ju lutem provoni perseri."
+  );
+}
 
 export default function Contact() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const contactMutation = usePostContact({
+    mutation: {
+      onSuccess: () => {
+        toast({
+          title: "Mesazhi u Dërgua",
+          description: "Kemi marrë mesazhin tuaj dhe do t'ju kontaktojmë së shpejti.",
+        });
+        formRef.current?.reset();
+      },
+      onError: (error) => {
+        toast({
+          title: "Mesazhi nuk u dergua",
+          description: getContactErrorMessage(error),
+          variant: "destructive",
+        });
+      },
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const isSubmitting = contactMutation.isPending;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Mesazhi u Dërgua",
-        description: "Kemi marrë mesazhin tuaj dhe do t'ju kontaktojmë së shpejti.",
-      });
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+    const formData = new FormData(e.currentTarget);
+
+    contactMutation.mutate({
+      data: {
+        name: String(formData.get("name") ?? ""),
+        email: String(formData.get("email") ?? ""),
+        subject: String(formData.get("subject") ?? ""),
+        message: String(formData.get("message") ?? ""),
+      },
+    });
   };
 
   return (
@@ -58,24 +88,24 @@ export default function Contact() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <Label className="text-white/80">Emri</Label>
-                  <Input required className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="Emri juaj" />
+                  <Input required disabled={isSubmitting} name="name" className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="Emri juaj" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-white/80">Emaili</Label>
-                  <Input required type="email" className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="ju@email.com" />
+                  <Input required disabled={isSubmitting} name="email" type="email" className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="ju@email.com" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-white/80">Subjekti</Label>
-                <Input required className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="Si mund t'ju ndihmojmë?" />
+                <Input required disabled={isSubmitting} name="subject" className="bg-white/5 border-white/10 text-white h-12 rounded-xl" placeholder="Si mund t'ju ndihmojmë?" />
               </div>
               <div className="space-y-2">
                 <Label className="text-white/80">Mesazhi</Label>
-                <Textarea required className="bg-white/5 border-white/10 text-white rounded-xl min-h-[120px]" placeholder="Shkruani mesazhin tuaj këtu..." />
+                <Textarea required disabled={isSubmitting} name="message" className="bg-white/5 border-white/10 text-white rounded-xl min-h-[120px]" placeholder="Shkruani mesazhin tuaj këtu..." />
               </div>
               <Button type="submit" disabled={isSubmitting} className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white text-base shadow-lg shadow-primary/20">
                 {isSubmitting ? "Duke dërguar..." : <><Send className="w-4 h-4 mr-2" /> Dërgo Mesazhin</>}

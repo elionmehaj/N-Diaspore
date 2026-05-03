@@ -5,7 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { BestDateRoute } from "./bestDateRoute.js";
+import type { BestDateRoute } from "./bestDateRoute";
 
 export interface BestDateSummary {
   /** @pattern ^\d{4}-\d{2}-\d{2}$ */

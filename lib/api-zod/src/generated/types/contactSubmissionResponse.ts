@@ -5,9 +5,9 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { FlightDeal } from "./flightDeal";
 
-export interface FlightDealsResponse {
-  count: number;
-  data: FlightDeal[];
+export interface ContactSubmissionResponse {
+  success: boolean;
+  id: string;
+  message: string;
 }

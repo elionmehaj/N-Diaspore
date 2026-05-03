@@ -44,6 +44,30 @@ export const TransportSearchResponseItem = zod.object({
 export const TransportSearchResponse = zod.array(TransportSearchResponseItem);
 
 /**
+ * Stores a contact form submission for follow-up
+ * @summary Submit a contact form message
+ */
+export const postContactBodyNameMax = 120;
+
+export const postContactBodyEmailMin = 3;
+export const postContactBodyEmailMax = 254;
+
+export const postContactBodySubjectMax = 160;
+
+export const postContactBodyMessageMax = 4000;
+
+export const PostContactBody = zod.object({
+  name: zod.string().min(1).max(postContactBodyNameMax),
+  email: zod
+    .string()
+    .email()
+    .min(postContactBodyEmailMin)
+    .max(postContactBodyEmailMax),
+  subject: zod.string().min(1).max(postContactBodySubjectMax),
+  message: zod.string().min(1).max(postContactBodyMessageMax),
+});
+
+/**
  * Returns the cheapest future flight deals collected by the agents
  * @summary Get trending flight deals
  */
